@@ -11,6 +11,7 @@
 	<br>
 	<p>Your generated password:</p>
 	<p id="password"></p>
+	<button id="copyButton" onclick="copyPassword()">Copy</button>
 	
 	<script>
 		function generatePassword() {
@@ -34,6 +35,18 @@
 			
 			// Display the generated password
 			document.getElementById("password").innerHTML = password;
+		}
+		
+		function copyPassword() {
+			// Select the password text
+			var passwordText = document.getElementById("password");
+			passwordText.select();
+			
+			// Copy the selected text to the clipboard
+			document.execCommand("copy");
+			
+			// Display a message indicating that the password has been copied
+			alert("Password copied to clipboard!");
 		}
 	</script>
 </body>
