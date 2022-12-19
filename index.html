@@ -1,53 +1,68 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Password Generator</title>
-</head>
-<body>
-	<h1>Password Generator</h1>
-	<p>Enter the desired length of the password:</p>
-	<input type="number" id="passwordLength">
-	<button onclick="generatePassword()">Generate Password</button>
-	<br>
-	<p>Your generated password:</p>
-	<p id="password"></p>
-	<button id="copyButton" onclick="copyPassword()">Copy</button>
+function generatePassword() {
+	// Get the desired password length
+	var passwordLength = document.getElementById("passwordLength").value;
 	
-	<script>
-		function generatePassword() {
-			// Get the desired password length
-			var passwordLength = document.getElementById("passwordLength").value;
-			
-			// Set the possible characters for the password
-			var possibleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
-			
-			// Initialize the password string
-			var password = "";
-			
-			// Loop through the desired length and generate a random character for each iteration
-			for (var i = 0; i < passwordLength; i++) {
-				// Generate a random index for the possible characters
-				var randomIndex = Math.floor(Math.random() * possibleCharacters.length);
-				
-				// Add the character at the random index to the password string
-				password += possibleCharacters[randomIndex];
-			}
-			
-			// Display the generated password
-			document.getElementById("password").innerHTML = password;
+	// Set the possible characters for the password
+	var possibleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
+	
+	// Initialize the password string
+	var password = "";
+	
+	// Flag to track whether a number, special character, upper case letter, and lower case letter have been added to the password
+	var numberAdded = false;
+	var specialAdded = false;
+	var upperAdded = false;
+	var lowerAdded = false;
+	
+	// Loop through the desired length and generate a random character for each iteration
+	for (var i = 0; i < passwordLength; i++) {
+		// Generate a random index for the possible characters
+		var randomIndex = Math.floor(Math.random() * possibleCharacters.length);
+		
+		// Add the character at the random index to the password string
+		var char = possibleCharacters[randomIndex];
+		password += char;
+		
+		// Update the flags if the character satisfies one of the requirements
+		if (!numberAdded && /\d/.test(char)) {
+			numberAdded = true;
+		}
+		if (!specialAdded && /[!@#$%^&*()_+]/.test(char)) {
+			specialAdded = true;
+		}
+		if (!upperAdded && /[A-Z]/.test(char)) {
+			upperAdded = true;
+		}
+		if (!lowerAdded && /[a-z]/.test(char)) {
+			lowerAdded = true;
 		}
 		
-		function copyPassword() {
-			// Select the password text
-			var passwordText = document.getElementById("password");
-			passwordText.select();
-			
-			// Copy the selected text to the clipboard
-			document.execCommand("copy");
-			
-			// Display a message indicating that the password has been copied
-			alert("Password copied to clipboard!");
+		// If all of the requirements have been satisfied, break out of the loop
+		if (numberAdded && specialAdded && upperAdded && lowerAdded) {
+			break;
 		}
-	</script>
-</body>
-</html>
+	}
+	
+	// If any of the requirements have not been satisfied, add the missing characters
+	while (!numberAdded) {
+		// Generate a random index for the numbers string
+		var randomIndex = Math.floor(Math.random() * 10);
+		
+		// Add the character at the random index to the password string
+		password += randomIndex;
+		numberAdded = true;
+	}
+	while (!specialAdded) {
+		// Generate a random index for the special characters string
+		var randomIndex = Math.floor(Math.random() * 10);
+		
+		// Add the character at the random index to the password string
+		password += "!@#$%^&*()_+".charAt(randomIndex);
+		specialAdded = true;
+	}
+	while (!upperAdded) {
+		// Generate a random index for the upper case letters string
+		var randomIndex = Math.floor(Math.random() * 26);
+		
+		// Add the character at the random index to the password string
+		password += "ABCDEFGHIJKLMNOPQRST
